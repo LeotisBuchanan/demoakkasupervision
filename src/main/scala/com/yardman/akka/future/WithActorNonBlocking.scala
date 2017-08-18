@@ -1,5 +1,6 @@
 package com.knoldus.akka.future
 
+import akka.actor.Status.Success
 import akka.actor.{Actor, ActorSystem, Props}
 import akka.pattern.ask
 import akka.util.Timeout
@@ -14,6 +15,8 @@ object WithActorNonBlocking extends App {
   val a2 = system.actorOf(Props[A2])
   val f = a1 ? ""
 
+
+
   f onSuccess {
     case m => println("success"); a2 ! m
   }
@@ -25,7 +28,8 @@ object WithActorNonBlocking extends App {
 
 class A1 extends Actor {
   def receive = {
-    case _ => sender ! "Hello"
+    case _ => {Thread.sleep(6000)
+              sender ! "Hello"}
   }
 }
 
